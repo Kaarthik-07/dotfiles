@@ -1,0 +1,5 @@
+allow_images=true
+colors=colors
+filter_rate=100
+allow_markup=true
+lines=15
