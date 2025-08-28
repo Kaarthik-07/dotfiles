@@ -5,9 +5,8 @@
 local M = {}
 
 M.base46 = {
-    theme = "radium",
+    theme = "horizon",
     transparency = true,
-
     -- hl_override = {
     -- 	Comment = { italic = true },
     -- 	["@comment"] = { italic = true },
