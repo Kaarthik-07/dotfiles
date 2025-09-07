@@ -46,7 +46,7 @@ alias l='ls -CF'
 alias gac='git add . && git commit -m '
 alias stfu='sudo shutdown -h now'
 alias rb='sudo reboot'
-
+alias py='python3'
 
 if [ -n "$IN_NIX_SHELL" ]; then
   echo "NIX....."

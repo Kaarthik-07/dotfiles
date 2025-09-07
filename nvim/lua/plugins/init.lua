@@ -1,4 +1,10 @@
 return {
+    {
+        "nvim-java/nvim-java",
+        config = function()
+            require("java").setup()
+        end,
+    },
 
     {
         "nvim-treesitter/nvim-treesitter",

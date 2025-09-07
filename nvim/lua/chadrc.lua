@@ -5,12 +5,17 @@
 local M = {}
 
 M.base46 = {
-    theme = "horizon",
+    theme = "bearded-arc",
     transparency = true,
     -- hl_override = {
     -- 	Comment = { italic = true },
     -- 	["@comment"] = { italic = true },
     -- },
+}
+M.lsp = {
+    servers = {
+        "jdtls",
+    },
 }
 
 return M
