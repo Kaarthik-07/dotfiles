@@ -1,11 +1,18 @@
 return {
+
+    -- -----------------------------
+    -- Java (SINGLE source of truth)
+    -- -----------------------------
     {
         "nvim-java/nvim-java",
+        ft = { "java" },
         config = function()
-            require("java").setup()
+            -- REMOVE EVERYTHING HERE
         end,
     },
-
+    -- -----------------------------
+    -- Treesitter
+    -- -----------------------------
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPre", "BufNewFile" },
@@ -14,15 +21,21 @@ return {
         end,
     },
 
+    -- -----------------------------
+    -- LSP (NON-Java servers only)
+    -- -----------------------------
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
         config = function()
             require("nvchad.configs.lspconfig").defaults()
-            require("configs.lspconfig")
+            require("configs.lspconfig") -- MUST NOT setup jdtls
         end,
     },
 
+    -- -----------------------------
+    -- Mason LSP installer
+    -- -----------------------------
     {
         "williamboman/mason-lspconfig.nvim",
         event = "VeryLazy",
@@ -32,6 +45,9 @@ return {
         end,
     },
 
+    -- -----------------------------
+    -- Linting
+    -- -----------------------------
     {
         "mfussenegger/nvim-lint",
         event = { "BufReadPre", "BufNewFile" },
@@ -40,29 +56,14 @@ return {
         end,
     },
 
-    {
-        "rshkarin/mason-nvim-lint",
-        event = "VeryLazy",
-        dependencies = { "nvim-lint" },
-        config = function()
-            require("configs.mason-lint")
-        end,
-    },
-
+    -- -----------------------------
+    -- Formatting
+    -- -----------------------------
     {
         "stevearc/conform.nvim",
         event = "BufWritePre",
         config = function()
             require("configs.conform")
-        end,
-    },
-
-    {
-        "zapling/mason-conform.nvim",
-        event = "VeryLazy",
-        dependencies = { "conform.nvim" },
-        config = function()
-            require("configs.mason-conform")
         end,
     },
 }
