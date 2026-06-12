@@ -1,109 +1,99 @@
-{ lib, pkgs, ... }:
-
-let
-  # catppuccin mocha
-  base   = "#1e1e2e";
-  text   = "#cdd6f4";
-  blue   = "#89b4fa";
-  red    = "#f38ba8";
-  muted  = "#585b70";
-  surface = "#313244";
-in
+{ pkgs, ... }:
 {
-  xsession.windowManager.i3 = {
-    enable = true;
-    config = rec {
-      modifier = "Mod4";   # Super
-      terminal = "wezterm";
-      menu     = "rofi -show drun";
+  xdg.configFile."i3/config".text = ''
+    set $mod Mod4
+    set $term wezterm
 
-      fonts = {
-        names = [ "DankMono Nerd Font Mono" "monospace" ];
-        size  = 12.0;
-      };
+    font pango:monospace 12
 
-      # disable all default keybindings so we control everything
-      keybindings = lib.mkOptionDefault {
-        # focus
-        "${modifier}+h" = "focus left";
-        "${modifier}+j" = "focus down";
-        "${modifier}+k" = "focus up";
-        "${modifier}+l" = "focus right";
+    gaps inner 8
+    gaps outer 4
+    default_border pixel 2
+    hide_edge_borders smart
 
-        # move
-        "${modifier}+shift+h" = "move left";
-        "${modifier}+shift+j" = "move down";
-        "${modifier}+shift+k" = "move up";
-        "${modifier}+shift+l" = "move right";
+    # launch
+    bindsym $mod+Return exec $term
+    bindsym $mod+d      exec rofi -show drun
+    bindsym $mod+q      kill
 
-        # layout
-        "${modifier}+f"         = "fullscreen toggle";
-        "${modifier}+s"         = "layout stacking";
-        "${modifier}+w"         = "layout tabbed";
-        "${modifier}+e"         = "layout toggle split";
-        "${modifier}+shift+space" = "floating toggle";
-        "${modifier}+space"     = "focus mode_toggle";
+    # focus
+    bindsym $mod+h focus left
+    bindsym $mod+j focus down
+    bindsym $mod+k focus up
+    bindsym $mod+l focus right
 
-        # resize mode
-        "${modifier}+r" = "mode resize";
+    # move
+    bindsym $mod+Shift+h move left
+    bindsym $mod+Shift+j move down
+    bindsym $mod+Shift+k move up
+    bindsym $mod+Shift+l move right
 
-        # workspaces
-        "${modifier}+1" = "workspace number 1";
-        "${modifier}+2" = "workspace number 2";
-        "${modifier}+3" = "workspace number 3";
-        "${modifier}+4" = "workspace number 4";
-        "${modifier}+5" = "workspace number 5";
-        "${modifier}+shift+1" = "move container to workspace number 1";
-        "${modifier}+shift+2" = "move container to workspace number 2";
-        "${modifier}+shift+3" = "move container to workspace number 3";
-        "${modifier}+shift+4" = "move container to workspace number 4";
-        "${modifier}+shift+5" = "move container to workspace number 5";
+    # split
+    bindsym $mod+b split h
+    bindsym $mod+v split v
 
-        # kill / reload
-        "${modifier}+shift+q"      = "kill";
-        "${modifier}+shift+c"      = "reload";
-        "${modifier}+shift+r"      = "restart";
-        "${modifier}+shift+e"      = "exec i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'";
-      };
+    # layout
+    bindsym $mod+f            fullscreen toggle
+    bindsym $mod+s            layout stacking
+    bindsym $mod+w            layout tabbed
+    bindsym $mod+e            layout toggle split
+    bindsym $mod+Shift+space  floating toggle
+    bindsym $mod+space        focus mode_toggle
 
-      modes.resize = {
-        h     = "resize shrink width  20 px";
-        l     = "resize grow   width  20 px";
-        k     = "resize shrink height 20 px";
-        j     = "resize grow   height 20 px";
-        Return = "mode default";
-        Escape = "mode default";
-      };
+    # workspaces
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
 
-      gaps = {
-        inner = 8;
-        outer = 4;
-      };
+    # system
+    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r restart
+    bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'
 
-      bars = [{
-        statusCommand = "${pkgs.i3status}/bin/i3status";
-        fonts = { names = [ "monospace" ]; size = 11.0; };
-        colors = {
-          background        = base;
-          statusline        = text;
-          separator         = muted;
-          focusedWorkspace  = { border = blue;    background = blue;    text = base; };
-          activeWorkspace   = { border = surface; background = surface; text = text; };
-          inactiveWorkspace = { border = base;    background = base;    text = muted; };
-          urgentWorkspace   = { border = red;     background = red;     text = base; };
-        };
-      }];
+    # resize
+    bindsym $mod+r mode "resize"
+    mode "resize" {
+      bindsym h resize shrink width  20 px or 20 ppt
+      bindsym l resize grow   width  20 px or 20 ppt
+      bindsym k resize shrink height 20 px or 20 ppt
+      bindsym j resize grow   height 20 px or 20 ppt
+      bindsym Return mode "default"
+      bindsym Escape mode "default"
+    }
 
-      colors = {
-        focused         = { border = blue;    background = blue;    text = base;    indicator = blue;    childBorder = blue; };
-        unfocused       = { border = surface; background = base;    text = muted;   indicator = surface; childBorder = surface; };
-        focusedInactive = { border = surface; background = surface; text = text;    indicator = surface; childBorder = surface; };
-        urgent          = { border = red;     background = red;     text = base;    indicator = red;     childBorder = red; };
-      };
+    # catppuccin mocha
+    set $base    #1e1e2e
+    set $text    #cdd6f4
+    set $blue    #89b4fa
+    set $red     #f38ba8
+    set $muted   #585b70
+    set $surface #313244
 
-      startup = [
-        { command = "${pkgs.picom}/bin/picom --daemon"; notification = false; }
-      ];
-    };
-  };
+    client.focused          $blue    $blue    $base    $blue    $blue
+    client.unfocused        $surface $base    $muted   $surface $surface
+    client.focused_inactive $surface $surface $text    $surface $surface
+    client.urgent           $red     $red     $base    $red     $red
+
+    bar {
+      status_command i3status
+      colors {
+        background $base
+        statusline $text
+        separator  $muted
+        focused_workspace  $blue    $blue    $base
+        active_workspace   $surface $surface $text
+        inactive_workspace $base    $base    $muted
+        urgent_workspace   $red     $red     $base
+      }
+    }
+
+    exec --no-startup-id picom --daemon
+  '';
 }
