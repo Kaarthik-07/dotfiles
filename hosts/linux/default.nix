@@ -16,9 +16,10 @@
   programs.zsh.enable = true;
 
   users.users.mikey = {
-    isNormalUser = true;
-    shell        = pkgs.zsh;
-    extraGroups  = [ "wheel" "networkmanager" "audio" "video" ];
+    isNormalUser    = true;
+    shell           = pkgs.zsh;
+    extraGroups     = [ "wheel" "networkmanager" "audio" "video" ];
+    initialPassword = "changeme";  # set a real password after first login with: passwd
   };
 
   environment.systemPackages = with pkgs; [ git curl wget ];
