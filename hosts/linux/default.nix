@@ -2,6 +2,21 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  boot.loader = {
+    systemd-boot.enable    = false;
+    efi.canTouchEfiVariables = true;
+    grub = {
+      enable       = true;
+      efiSupport   = true;
+      device       = "nodev";
+      useOSProber  = true;
+    };
+  };
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  networking.hostName = "nixos";
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   services.xserver = {
