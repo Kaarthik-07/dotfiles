@@ -94,7 +94,9 @@
       }
     }
 
-    exec --no-startup-id picom --daemon
+    # set solid catppuccin bg so transparency has something to show through
+    exec --no-startup-id xsetroot -solid "#1e1e2e"
+    exec --no-startup-id picom --daemon --backend glx --blur-method dual_kawase --blur-strength 8
     exec --no-startup-id nm-applet
   '';
 }

@@ -17,7 +17,7 @@
       ripgrep fd fzf bat eza jq
       tmux direnv
       nodejs_22 go
-      xclip rofi feh polybar
+      xclip rofi feh polybar xorg.xsetroot
       wezterm
       nerd-fonts.jetbrains-mono
       networkmanagerapplet
