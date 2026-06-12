@@ -1,5 +1,4 @@
 flake.lock
 dots/nvim/lazy-lock.json
-dots/wezterm/assets/
 result
 .direnv
