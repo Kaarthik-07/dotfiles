@@ -95,5 +95,6 @@
     }
 
     exec --no-startup-id picom --daemon
+    exec --no-startup-id nm-applet
   '';
 }

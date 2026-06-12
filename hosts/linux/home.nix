@@ -20,6 +20,7 @@
       xclip rofi feh polybar
       wezterm
       nerd-fonts.jetbrains-mono
+      networkmanagerapplet
     ];
   };
 
