@@ -18,6 +18,8 @@
       tmux direnv
       nodejs_22 go
       xclip rofi feh polybar
+      wezterm
+      nerd-fonts.jetbrains-mono
     ];
   };
 

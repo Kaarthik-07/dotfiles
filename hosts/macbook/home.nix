@@ -16,6 +16,7 @@
       ripgrep fd fzf bat eza jq
       tmux direnv
       nodejs_22 go
+      nerd-fonts.jetbrains-mono
     ];
   };
 
