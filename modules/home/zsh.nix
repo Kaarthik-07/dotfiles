@@ -28,7 +28,7 @@
       py     = "python3";
     };
 
-    initExtra = ''
+    initContent = ''
       ${lib.optionalString pkgs.stdenv.isDarwin ''
         eval "$(/opt/homebrew/bin/brew shellenv)"
         export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null)

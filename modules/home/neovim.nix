@@ -3,6 +3,8 @@
   programs.neovim = {
     enable        = true;
     defaultEditor = true;
+    withRuby      = false;
+    withPython3   = false;
   };
 
   # NvChad config lives in dots/nvim — symlinked to ~/.config/nvim
@@ -14,7 +16,7 @@
   home.packages = with pkgs; [
     lua-language-server
     stylua
-    nodePackages.prettier
+    prettier
     jdt-language-server
   ];
 }
