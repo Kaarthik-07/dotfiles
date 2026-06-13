@@ -3,7 +3,7 @@
   programs.git = {
     enable    = true;
     userName  = "Kaarthik-07";
-    userEmail = "illaddlater@gmail.com";
+    userEmail = "57kaarthikj@gmail.com";
 
     extraConfig = {
       init.defaultBranch  = "main";
