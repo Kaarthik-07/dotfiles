@@ -5,7 +5,7 @@ local constants = require 'constants'
 local config = wezterm.config_builder()
 
 -- font
-config.font_size   = 16
+config.font_size   = 13
 config.line_height = 1.2
 config.font = wezterm.font_with_fallback {
   { family = 'JetBrainsMono Nerd Font', weight = 'Medium' },
@@ -45,9 +45,8 @@ if f then
 end
 
 -- appearance
-config.cursor_shape                = 'BlinkingBar'
-config.cursor_blink_rate           = 600
 config.default_cursor_style        = 'BlinkingBar'
+config.cursor_blink_rate           = 600
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar           = false
 config.window_padding              = { left = 8, right = 8, top = 8, bottom = 0 }

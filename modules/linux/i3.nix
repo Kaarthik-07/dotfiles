@@ -1,5 +1,50 @@
 { pkgs, ... }:
 {
+  xdg.configFile."i3status/config".text = ''
+    general {
+      colors      = true
+      interval    = 5
+      color_good     = "#a6e3a1"
+      color_degraded = "#f9e2af"
+      color_bad      = "#f38ba8"
+    }
+
+    order += "wireless _first_"
+    order += "battery all"
+    order += "cpu_usage"
+    order += "memory"
+    order += "tztime local"
+
+    wireless _first_ {
+      format_up   = "  %essid"
+      format_down = "  down"
+    }
+
+    battery all {
+      format       = "%status %percentage"
+      format_down  = "no battery"
+      status_chr   = " "
+      status_bat   = " "
+      status_full  = " "
+      status_unk   = "?"
+      low_threshold = 20
+    }
+
+    cpu_usage {
+      format = "  %usage"
+    }
+
+    memory {
+      format             = "  %used"
+      threshold_degraded = "10%"
+      threshold_critical = "5%"
+    }
+
+    tztime local {
+      format = "  %d %b %Y  %H:%M"
+    }
+  '';
+
   xdg.configFile."i3/config".text = ''
     set $mod Mod4
     set $term wezterm
@@ -95,7 +140,7 @@
     }
 
     # set solid catppuccin bg so transparency has something to show through
-    exec --no-startup-id xsetroot -solid "#1e1e2e"
+    exec --no-startup-id feh --bg-fill /home/mikey/Downloads/linux.jpeg
     exec --no-startup-id picom --daemon --backend glx --blur-method dual_kawase --blur-strength 8
     exec --no-startup-id nm-applet
   '';

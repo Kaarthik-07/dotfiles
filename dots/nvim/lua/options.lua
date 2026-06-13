@@ -9,6 +9,8 @@ o.shiftwidth = 4
 o.tabstop = 4
 o.softtabstop = 4
 
+vim.opt.clipboard = "unnamedplus"
+
 -- o.cursorlineopt ='both' -- to enable cursorline!
 
 -- set filetype for .CBL COBOL files.
