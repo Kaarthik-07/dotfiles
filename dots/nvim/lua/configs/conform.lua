@@ -1,57 +1,39 @@
 local options = {
     formatters_by_ft = {
-        lua = { "stylua" },
-        -- c = { "clang-format" },
-        -- cpp = { "clang-format" },
-        -- go = { "gofumpt", "goimports-reviser", "golines" },
-        -- haskell = { "fourmolu", "stylish-haskell" },
-        -- python = { "isort", "black" },
+        lua        = { "stylua" },
+        c          = { "clang_format" },
+        cpp        = { "clang_format" },
+        go         = { "gofumpt", "goimports" },
+        python     = { "isort", "black" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        html       = { "prettier" },
+        css        = { "prettier" },
+        json       = { "prettier" },
+        yaml       = { "prettier" },
+        markdown   = { "prettier" },
+        graphql    = { "prettier" },
+        rust       = { "rustfmt" },
+        sh         = { "shfmt" },
+        bash       = { "shfmt" },
+        nix        = { "nixfmt" },
     },
 
     formatters = {
-        -- -- C & C++
-        -- ["clang-format"] = {
-        --     prepend_args = {
-        --         "-style={ \
-        --                 IndentWidth: 4, \
-        --                 TabWidth: 4, \
-        --                 UseTab: Never, \
-        --                 AccessModifierOffset: 0, \
-        --                 IndentAccessModifiers: true, \
-        --                 PackConstructorInitializers: Never}",
-        --     },
-        -- },
-        -- -- Golang
-        -- ["goimports-reviser"] = {
-        --     prepend_args = { "-rm-unused" },
-        -- },
-        -- golines = {
-        --     prepend_args = { "--max-len=80" },
-        -- },
-        -- -- Lua
-        -- stylua = {
-        --     prepend_args = {
-        --         "--column-width", "80",
-        --         "--line-endings", "Unix",
-        --         "--indent-type", "Spaces",
-        --         "--indent-width", "4",
-        --         "--quote-style", "AutoPreferDouble",
-        --     },
-        -- },
-        -- -- Python
-        -- black = {
-        --     prepend_args = {
-        --         "--fast",
-        --         "--line-length",
-        --         "80",
-        --     },
-        -- },
-        -- isort = {
-        --     prepend_args = {
-        --         "--profile",
-        --         "black",
-        --     },
-        -- },
+        black = {
+            prepend_args = { "--fast", "--line-length", "88" },
+        },
+        isort = {
+            prepend_args = { "--profile", "black" },
+        },
+        prettier = {
+            prepend_args = { "--tab-width", "2", "--single-quote" },
+        },
+        shfmt = {
+            prepend_args = { "-i", "2" },
+        },
     },
 
     format_on_save = {

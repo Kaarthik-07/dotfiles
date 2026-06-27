@@ -1,4 +1,58 @@
 { pkgs, ... }:
+let
+  vol-up = pkgs.writeShellScript "vol-up" ''
+    pamixer --increase 5
+    VOL=$(pamixer --get-volume)
+    notify-send -h string:synchronous:volume -h int:value:"$VOL" " Volume" "$VOL%"
+  '';
+
+  vol-down = pkgs.writeShellScript "vol-down" ''
+    pamixer --decrease 5
+    VOL=$(pamixer --get-volume)
+    notify-send -h string:synchronous:volume -h int:value:"$VOL" " Volume" "$VOL%"
+  '';
+
+  vol-mute = pkgs.writeShellScript "vol-mute" ''
+    pamixer --toggle-mute
+    if pamixer --get-mute | grep -q true; then
+      notify-send -h string:synchronous:volume " Volume" "Muted"
+    else
+      VOL=$(pamixer --get-volume)
+      notify-send -h string:synchronous:volume -h int:value:"$VOL" " Volume" "$VOL%"
+    fi
+  '';
+
+  bri-up = pkgs.writeShellScript "bri-up" ''
+    brightnessctl set +10%
+    BRI=$(( $(brightnessctl get) * 100 / $(brightnessctl max) ))
+    notify-send -h string:synchronous:brightness -h int:value:"$BRI" " Brightness" "$BRI%"
+  '';
+
+  bri-down = pkgs.writeShellScript "bri-down" ''
+    brightnessctl set 10%-
+    BRI=$(( $(brightnessctl get) * 100 / $(brightnessctl max) ))
+    notify-send -h string:synchronous:brightness -h int:value:"$BRI" " Brightness" "$BRI%"
+  '';
+
+  ss-full = pkgs.writeShellScript "ss-full" ''
+    maim | xclip -selection clipboard -t image/png
+    notify-send " Screenshot" "Copied to clipboard"
+  '';
+
+  ss-area = pkgs.writeShellScript "ss-area" ''
+    sleep 0.2
+    maim -s | xclip -selection clipboard -t image/png
+    notify-send " Screenshot" "Area copied to clipboard"
+  '';
+
+  ss-save = pkgs.writeShellScript "ss-save" ''
+    mkdir -p "$HOME/Pictures"
+    F="$HOME/Pictures/ss_$(date +%Y%m%d_%H%M%S).png"
+    maim "$F"
+    xclip -selection clipboard -t image/png < "$F"
+    notify-send " Screenshot" "Saved & copied: $F"
+  '';
+in
 {
   xdg.configFile."i3status/config".text = ''
     general {
@@ -45,11 +99,74 @@
     }
   '';
 
+  xdg.configFile."dunst/dunstrc".text = ''
+    [global]
+        monitor                = 0
+        follow                 = mouse
+        width                  = 320
+        height                 = 300
+        origin                 = top-right
+        offset                 = 12x48
+        scale                  = 0
+        notification_limit     = 5
+        progress_bar           = true
+        progress_bar_height    = 8
+        progress_bar_frame_width = 1
+        progress_bar_min_width = 150
+        progress_bar_max_width = 300
+        indicate_hidden        = yes
+        transparency           = 10
+        separator_height       = 2
+        padding                = 12
+        horizontal_padding     = 14
+        text_icon_padding      = 0
+        frame_width            = 2
+        frame_color            = "#89b4fa"
+        separator_color        = frame
+        sort                   = yes
+        font                   = JetBrainsMono Nerd Font 10
+        line_height            = 0
+        markup                 = full
+        format                 = "<b>%s</b>\n%b"
+        alignment              = left
+        vertical_alignment     = center
+        show_age_threshold     = 60
+        ellipsize              = middle
+        ignore_newline         = no
+        stack_duplicates       = true
+        hide_duplicate_count   = false
+        show_indicators        = yes
+        sticky_history         = yes
+        history_length         = 20
+        corner_radius          = 8
+        mouse_left_click       = close_current
+        mouse_middle_click     = do_action, close_current
+        mouse_right_click      = close_all
+
+    [urgency_low]
+        background  = "#1e1e2e"
+        foreground  = "#cdd6f4"
+        frame_color = "#585b70"
+        timeout     = 3
+
+    [urgency_normal]
+        background  = "#1e1e2e"
+        foreground  = "#cdd6f4"
+        frame_color = "#89b4fa"
+        timeout     = 5
+
+    [urgency_critical]
+        background  = "#1e1e2e"
+        foreground  = "#f38ba8"
+        frame_color = "#f38ba8"
+        timeout     = 0
+  '';
+
   xdg.configFile."i3/config".text = ''
     set $mod Mod4
     set $term wezterm
 
-    font pango:monospace 12
+    font pango:JetBrainsMono Nerd Font 11
 
     gaps inner 8
     gaps outer 4
@@ -102,6 +219,9 @@
     bindsym $mod+Shift+r restart
     bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'
 
+    # lock screen
+    bindsym $mod+Shift+x exec i3lock -c 1e1e2e
+
     # resize
     bindsym $mod+r mode "resize"
     mode "resize" {
@@ -112,6 +232,24 @@
       bindsym Return mode "default"
       bindsym Escape mode "default"
     }
+
+    # volume
+    bindsym XF86AudioRaiseVolume exec --no-startup-id ${vol-up}
+    bindsym XF86AudioLowerVolume exec --no-startup-id ${vol-down}
+    bindsym XF86AudioMute        exec --no-startup-id ${vol-mute}
+    bindsym XF86AudioMicMute     exec --no-startup-id pamixer --default-source --toggle-mute
+
+    # brightness
+    bindsym XF86MonBrightnessUp   exec --no-startup-id ${bri-up}
+    bindsym XF86MonBrightnessDown exec --no-startup-id ${bri-down}
+
+    # screenshots
+    bindsym Print       exec --no-startup-id ${ss-full}
+    bindsym Shift+Print exec --no-startup-id ${ss-area}
+    bindsym ctrl+Print  exec --no-startup-id ${ss-save}
+
+    # clipboard history
+    bindsym $mod+Shift+v exec --no-startup-id CM_LAUNCHER=rofi clipmenu
 
     # catppuccin mocha
     set $base    #1e1e2e
@@ -127,6 +265,7 @@
     client.urgent           $red     $red     $base    $red     $red
 
     bar {
+      position top
       status_command i3status
       colors {
         background $base
@@ -139,9 +278,11 @@
       }
     }
 
-    # set solid catppuccin bg so transparency has something to show through
     exec --no-startup-id feh --bg-fill /home/mikey/Downloads/linux.jpeg
     exec --no-startup-id picom --daemon --backend glx --blur-method dual_kawase --blur-strength 8
     exec --no-startup-id nm-applet
+    exec --no-startup-id dunst
+    exec --no-startup-id clipmenud
+    exec --no-startup-id xautolock -time 5 -locker "i3lock -c 1e1e2e"
   '';
 }

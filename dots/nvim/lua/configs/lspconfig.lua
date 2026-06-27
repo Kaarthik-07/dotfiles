@@ -17,6 +17,13 @@ local servers = {
     "html",
     "cssls",
     "ts_ls",
+    "rust_analyzer",
+    "bashls",
+    "jsonls",
+    "yamlls",
+    "dockerls",
+    "tailwindcss",
+    "nixd",
 }
 
 for _, server in ipairs(servers) do

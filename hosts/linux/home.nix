@@ -22,6 +22,9 @@
       nerd-fonts.jetbrains-mono
       networkmanagerapplet
       brave
+      starship
+      pamixer
+      clipmenu
     ];
   };
 

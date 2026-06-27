@@ -40,20 +40,34 @@
     displayManager.lightdm.enable  = true;
     windowManager.i3 = {
       enable        = true;
-      extraPackages = with pkgs; [ i3status rofi feh picom xclip ];
+      extraPackages = with pkgs; [
+        i3status i3lock rofi feh picom xclip maim
+        brightnessctl dunst xautolock libnotify
+      ];
     };
   };
 
+  services.pipewire = {
+    enable            = true;
+    alsa.enable       = true;
+    alsa.support32Bit = true;
+    pulse.enable      = true;
+  };
+
+  hardware.bluetooth.enable = true;
+  services.blueman.enable   = true;
+
   programs.zsh.enable = true;
-programs.nix-ld.enable = true;
+  programs.nix-ld.enable = true;
+
   users.users.mikey = {
     isNormalUser    = true;
     shell           = pkgs.zsh;
-    extraGroups     = [ "wheel" "networkmanager" "audio" "video" ];
-    initialPassword = "changeme";  # set a real password after first login with: passwd
+    extraGroups     = [ "wheel" "networkmanager" "audio" "video" "bluetooth" ];
+    initialPassword = "changeme";
   };
 
-  environment.systemPackages = with pkgs; [ git curl wget ];
+  environment.systemPackages = with pkgs; [ git curl wget nixd ];
 
   system.stateVersion = "24.11";
 }
