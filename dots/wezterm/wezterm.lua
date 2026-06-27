@@ -25,13 +25,12 @@ config.font_rules = {
 -- colors
 config.color_scheme = 'Catppuccin Mocha'
 
--- CRT effect
-config.window_background_opacity   = 0.92
-config.macos_window_background_blur = 20
+-- CRT effect (blur handled by picom on Linux)
+config.window_background_opacity = 0.88
 config.foreground_text_hsb = {
   hue        = 1.0,
-  saturation = 1.1,
-  brightness = 1.4,
+  saturation = 1.2,
+  brightness = 1.5,
 }
 
 -- background image (only if asset exists — macOS with custom wallpaper)

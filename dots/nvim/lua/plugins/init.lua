@@ -12,15 +12,23 @@ return {
   },
 
   -- -----------------------------
-  -- Treesitter
+  -- Treesitter (extend NvChad's built-in spec via opts merge)
   -- -----------------------------
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPre", "BufNewFile" },
-    build = ":TSUpdate",
-    config = function()
-      require("configs.treesitter")
-    end,
+    opts = {
+      ensure_installed = {
+        "bash", "c", "cmake", "cpp", "fish", "go",
+        "lua", "luadoc", "markdown", "markdown_inline",
+        "python", "rust", "toml", "vim", "vimdoc",
+        "yaml", "typescript", "tsx", "javascript", "jsdoc",
+        "dockerfile", "css", "html", "json", "json5",
+        "java", "graphql", "properties", "xml",
+        "nix", "prisma", "proto", "sql", "regex",
+      },
+      highlight = { enable = true, use_languagetree = true },
+      indent    = { enable = true },
+    },
   },
 
   -- -----------------------------
@@ -77,5 +85,42 @@ return {
     config = function()
       require("configs.conform")
     end,
+  },
+
+  -- -----------------------------
+  -- Markdown renderer
+  -- -----------------------------
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    ft = { "markdown" },
+    opts = {
+      enabled = true,
+      heading = {
+        enabled = true,
+        icons   = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
+        backgrounds = {
+          "RenderMarkdownH1Bg",
+          "RenderMarkdownH2Bg",
+          "RenderMarkdownH3Bg",
+          "RenderMarkdownH4Bg",
+          "RenderMarkdownH5Bg",
+          "RenderMarkdownH6Bg",
+        },
+      },
+      code = {
+        enabled = true,
+        style   = "full",
+        border  = "thin",
+      },
+      bullet = {
+        enabled = true,
+        icons   = { "●", "○", "◆", "◇" },
+      },
+      checkbox = { enabled = true },
+      quote    = { enabled = true },
+      table    = { enabled = true },
+      link     = { enabled = true },
+    },
   },
 }

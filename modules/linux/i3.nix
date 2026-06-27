@@ -52,6 +52,12 @@ let
     xclip -selection clipboard -t image/png < "$F"
     notify-send " Screenshot" "Saved & copied: $F"
   '';
+
+  wezterm-bin   = "${pkgs.wezterm}/bin/wezterm";
+  thunar-bin    = "${pkgs.xfce.thunar}/bin/thunar";
+  copyq-bin     = "${pkgs.copyq}/bin/copyq";
+  nm-applet-bin = "${pkgs.networkmanagerapplet}/bin/nm-applet";
+
 in
 {
   xdg.configFile."i3status/config".text = ''
@@ -162,9 +168,44 @@ in
         timeout     = 0
   '';
 
+  xdg.configFile."rofi/config.rasi".text = ''
+    configuration {
+      modi: "drun,run";
+      show-icons: true;
+      drun-display-format: "{name}";
+    }
+
+    * {
+      background-color: #1e1e2e;
+      text-color:       #cdd6f4;
+      border-color:     #89b4fa;
+    }
+
+    window {
+      width:         600px;
+      location:      north;
+      anchor:        north;
+      y-offset:      25px;
+      border:        2px solid;
+      border-radius: 8px;
+    }
+
+    listview {
+      lines: 6;
+    }
+
+    inputbar {
+      padding: 8px 12px;
+    }
+
+    element selected {
+      background-color: #89b4fa;
+      text-color:       #1e1e2e;
+    }
+  '';
   xdg.configFile."i3/config".text = ''
     set $mod Mod4
-    set $term wezterm
+    set $term ${wezterm-bin}
 
     font pango:JetBrainsMono Nerd Font 11
 
@@ -175,7 +216,8 @@ in
 
     # launch
     bindsym $mod+Return exec $term
-    bindsym $mod+d      exec rofi -show drun
+    bindsym $mod+d exec --no-startup-id dmenu_run -fn 'monospace:size=10'
+    bindsym $mod+n      exec ${thunar-bin}
     bindsym $mod+q      kill
 
     # focus
@@ -249,7 +291,10 @@ in
     bindsym ctrl+Print  exec --no-startup-id ${ss-save}
 
     # clipboard history
-    bindsym $mod+Shift+v exec --no-startup-id CM_LAUNCHER=rofi clipmenu
+    bindsym $mod+Shift+v exec --no-startup-id ${copyq-bin} toggle
+    for_window [class="copyq"] floating enable
+    for_window [class="copyq"] resize set 520 380
+    for_window [class="copyq"] border pixel 2
 
     # catppuccin mocha
     set $base    #1e1e2e
@@ -279,10 +324,10 @@ in
     }
 
     exec --no-startup-id feh --bg-fill /home/mikey/Downloads/linux.jpeg
-    exec --no-startup-id picom --daemon --backend glx --blur-method dual_kawase --blur-strength 8
-    exec --no-startup-id nm-applet
+    exec --no-startup-id picom --daemon --backend glx --blur-method dual_kawase --blur-strength 8 --shadow --shadow-radius 12 --corner-radius 8
+    exec --no-startup-id ${nm-applet-bin}
     exec --no-startup-id dunst
-    exec --no-startup-id clipmenud
+    exec --no-startup-id ${copyq-bin} --start-server
     exec --no-startup-id xautolock -time 5 -locker "i3lock -c 1e1e2e"
   '';
 }

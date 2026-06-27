@@ -12,10 +12,6 @@ M.base46 = {
     -- 	["@comment"] = { italic = true },
     -- },
 }
-M.lsp = {
-    servers = {
-        "jdtls",
-    },
-}
+-- jdtls is managed entirely by nvim-java; do not list it here
 
 return M

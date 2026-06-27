@@ -2,3 +2,5 @@ flake.lock
 dots/nvim/lazy-lock.json
 result
 .direnv
+.claude
+.env

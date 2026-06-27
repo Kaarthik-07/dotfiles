@@ -20,7 +20,7 @@
 
   time.timeZone = "Asia/Kolkata";
 
-  i18n.defaultLocale = "en_IN";
+  i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS        = "en_IN";
     LC_IDENTIFICATION = "en_IN";
@@ -41,11 +41,14 @@
     windowManager.i3 = {
       enable        = true;
       extraPackages = with pkgs; [
-        i3status i3lock rofi feh picom xclip maim
+        i3status i3lock dmenu feh picom xclip maim
         brightnessctl dunst xautolock libnotify
       ];
     };
   };
+
+  services.gvfs.enable  = true;
+  services.tumbler.enable = true;
 
   services.pipewire = {
     enable            = true;

@@ -7,7 +7,7 @@ require("mason-lspconfig").setup({
         "html",
         "cssls",
         "ts_ls",
-        "jdtls",
+        -- jdtls omitted: nvim-java manages its own jdtls installation
         "rust_analyzer",
         "bashls",
         "jsonls",

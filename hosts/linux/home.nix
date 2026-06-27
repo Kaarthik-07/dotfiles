@@ -17,14 +17,19 @@
       ripgrep fd fzf bat eza jq
       tmux direnv
       nodejs_22 go
-      xclip rofi feh polybar xorg.xsetroot
+      xclip feh polybar xorg.xsetroot
       wezterm
       nerd-fonts.jetbrains-mono
       networkmanagerapplet
       brave
       starship
       pamixer
-      clipmenu
+      copyq
+      dmenu
+      xfce.thunar
+      xfce.thunar-volman
+      xfce.thunar-archive-plugin
+      gvfs
     ];
   };
 
