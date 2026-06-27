@@ -29,6 +29,8 @@
     };
 
     initContent = ''
+    export PATH="$HOME/.local/bin:$PATH"
+
       ${lib.optionalString pkgs.stdenv.isDarwin ''
         eval "$(/opt/homebrew/bin/brew shellenv)"
         export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null)
@@ -45,6 +47,7 @@
 
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
 
       eval "$(direnv hook zsh)"
     '';

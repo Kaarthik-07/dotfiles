@@ -21,6 +21,7 @@
       wezterm
       nerd-fonts.jetbrains-mono
       networkmanagerapplet
+      brave
     ];
   };
 
