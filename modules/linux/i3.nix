@@ -261,6 +261,8 @@ in
     bindsym $mod+Shift+r restart
     bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'
 
+    # blueman
+    exec --no-startup-id blueman-applet
     # lock screen
     bindsym $mod+Shift+x exec i3lock -c 1e1e2e
 
@@ -323,9 +325,10 @@ in
       }
     }
 
-    exec --no-startup-id feh --bg-fill /home/mikey/Downloads/linux.jpeg
+    exec --no-startup-id feh --bg-fill /home/mikey/Downloads/dino.jpg
     exec --no-startup-id picom --daemon --backend glx --blur-method dual_kawase --blur-strength 8 --shadow --shadow-radius 12 --corner-radius 8
     exec --no-startup-id ${nm-applet-bin}
+    exec --no-startup-id blueman-applet
     exec --no-startup-id dunst
     exec --no-startup-id ${copyq-bin} --start-server
     exec --no-startup-id xautolock -time 5 -locker "i3lock -c 1e1e2e"
