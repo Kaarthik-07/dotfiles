@@ -17,18 +17,17 @@
       ripgrep fd fzf bat eza jq
       tmux direnv
       nodejs_22 go
-      xclip feh polybar xorg.xsetroot
+      xclip feh xsetroot
       wezterm
       nerd-fonts.jetbrains-mono
       networkmanagerapplet
       brave
-      starship
       pamixer
       copyq
       dmenu
-      xfce.thunar
-      xfce.thunar-volman
-      xfce.thunar-archive-plugin
+      thunar
+      thunar-volman
+      thunar-archive-plugin
       gvfs
     ];
   };

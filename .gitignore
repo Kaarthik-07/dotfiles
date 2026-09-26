@@ -1,6 +1,15 @@
-flake.lock
-dots/nvim/lazy-lock.json
+# flake.lock is committed on purpose -- it is what makes rebuilds reproducible.
+# Regenerate deliberately with: nix flake update
+#
+# dots/nvim/lazy-lock.json is NOT ignored, but note that lazy.nvim cannot write
+# it there (Home Manager makes that path a store symlink), so it will not appear
+# on its own. See dots/nvim/lua/configs/lazy.lua for how it is generated.
+
 result
 .direnv
 .claude
 .env
+
+# local scratch
+*.bak
+*~

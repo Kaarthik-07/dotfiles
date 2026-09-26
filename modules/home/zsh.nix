@@ -90,22 +90,42 @@
 
     initContent = ''
 export PATH="$HOME/.local/bin:$HOME/.claude/local:$PATH"
-if [ -z "$SSH_AUTH_SOCK" ]; then
-  eval "$(ssh-agent -s)"
-  ssh-add ~/.ssh/id_ed25519
+
+# Only start an agent if we do not already have one. WezTerm provides its own
+# agent (SSH_AUTH_SOCK is already set inside it), so this only kicks in for
+# other terminals.
+#
+# SSH_ASKPASS_REQUIRE=never is scoped to this one command: your key is
+# passphrase-protected, so without it every new shell pops an x11-ssh-askpass
+# GUI dialog and blocks. Use `sa` below to add the key when you want it.
+if [ -z "$SSH_AUTH_SOCK" ] && [ -f "$HOME/.ssh/id_ed25519" ]; then
+  eval "$(ssh-agent -s)" >/dev/null
+  SSH_ASKPASS_REQUIRE=never ssh-add "$HOME/.ssh/id_ed25519" 2>/dev/null || true
 fi
 
-      ${lib.optionalString pkgs.stdenv.isDarwin ''
+# add the ssh key to the running agent (will prompt for the passphrase)
+sa() { ssh-add "$HOME/.ssh/id_ed25519"; }
+
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
         eval "$(/opt/homebrew/bin/brew shellenv)"
-        export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null)
-        export ANDROID_HOME=$HOME/Library/Android/sdk
-        export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin
+        if [ -x /usr/libexec/java_home ]; then
+          JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null) && export JAVA_HOME
+        fi
+        if [ -d "$HOME/Library/Android/sdk" ]; then
+          export ANDROID_HOME=$HOME/Library/Android/sdk
+          export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin
+        fi
       ''}
 
-      ${lib.optionalString pkgs.stdenv.isLinux ''
-        export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-        export ANDROID_HOME=$HOME/Android/Sdk
-        export PATH="$ANDROID_HOME/platform-tools:$PATH"
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
+        # java/android are not managed by nix here, so only export what exists
+        if [ -d /usr/lib/jvm/java-21-openjdk-amd64 ]; then
+          export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+        fi
+        if [ -d "$HOME/Android/Sdk" ]; then
+          export ANDROID_HOME=$HOME/Android/Sdk
+          export PATH="$ANDROID_HOME/platform-tools:$PATH"
+        fi
         alias pbcopy="xclip -sel clip"
       ''}
 

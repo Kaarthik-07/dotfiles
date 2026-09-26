@@ -2,10 +2,12 @@
 {
   programs.git = {
     enable    = true;
-    userName  = "Kaarthik-07";
-    userEmail = "57kaarthikj@gmail.com";
+    # `userName` / `userEmail` / `extraConfig` were renamed to `settings` in
+    # home-manager; the old names now emit deprecation warnings.
+    settings = {
+      user.name  = "Kaarthik-07";
+      user.email = "57kaarthikj@gmail.com";
 
-    extraConfig = {
       init.defaultBranch  = "main";
       pull.rebase         = true;
       push.autoSetupRemote = true;

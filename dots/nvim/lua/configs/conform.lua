@@ -3,7 +3,10 @@ local options = {
         lua        = { "stylua" },
         c          = { "clang_format" },
         cpp        = { "clang_format" },
-        go         = { "gofumpt", "goimports" },
+        -- goimports is no longer packaged in nixpkgs; gopls (already an LSP
+        -- server here) handles import fixing, and lsp_format = "fallback"
+        -- below means it formats first anyway.
+        go         = { "gofumpt" },
         python     = { "isort", "black" },
         javascript = { "prettier" },
         typescript = { "prettier" },

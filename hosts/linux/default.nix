@@ -64,9 +64,13 @@
   programs.nix-ld.enable = true;
 
   users.users.mikey = {
-    isNormalUser    = true;
-    shell           = pkgs.zsh;
-    extraGroups     = [ "wheel" "networkmanager" "audio" "video" "bluetooth" ];
+    isNormalUser = true;
+    shell        = pkgs.zsh;
+    extraGroups  = [ "wheel" "networkmanager" "audio" "video" "bluetooth" ];
+    # PLACEHOLDER -- only used when the account is first created.
+    # Change it immediately after the first boot with:  passwd mikey
+    # Then delete this line and set `hashedPassword` (generate one with
+    # `mkpasswd -m yescrypt`) so no plaintext secret lives in git.
     initialPassword = "changeme";
   };
 

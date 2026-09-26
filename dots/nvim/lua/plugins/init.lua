@@ -43,10 +43,12 @@ return {
   },
 
   -- -----------------------------
-  -- Mason
+  -- Mason (package manager)
   -- -----------------------------
+  -- NOTE: these live under the mason-org GitHub org now. The old
+  -- williamboman/* paths only still work via a 301 redirect.
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = "Mason",
     config = function()
       require("mason").setup()
@@ -54,10 +56,10 @@ return {
   },
 
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     event = "VeryLazy",
     dependencies = {
-      "mason.nvim",
+      "mason-org/mason.nvim",
       "nvim-lspconfig",
     },
     config = function()
@@ -68,6 +70,10 @@ return {
   -- -----------------------------
   -- Linting
   -- -----------------------------
+  -- The linter and formatter BINARIES are installed by Nix, not Mason -- see
+  -- modules/home/neovim.nix. The standalone mason-nvim-lint and
+  -- mason-conform plugins were deleted upstream when Mason 2.0 landed, so
+  -- there is nothing left to install here.
   {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
