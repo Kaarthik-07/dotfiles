@@ -9,15 +9,24 @@
   ];
 
   home = {
-    username      = "mikey";
+    username = "mikey";
     homeDirectory = "/home/mikey";
-    stateVersion  = "24.11";
+    stateVersion = "24.11";
 
     packages = with pkgs; [
-      ripgrep fd fzf bat eza jq
-      tmux direnv
-      nodejs_22 go
-      xclip feh xsetroot
+      ripgrep
+      fd
+      fzf
+      bat
+      eza
+      jq
+      tmux
+      direnv
+      nodejs_22
+      go
+      xclip
+      feh
+      xsetroot
       wezterm
       nerd-fonts.jetbrains-mono
       networkmanagerapplet
@@ -28,7 +37,8 @@
       thunar
       thunar-volman
       thunar-archive-plugin
-      gvfs
+      google-chrome
+      burpsuite
     ];
   };
 
