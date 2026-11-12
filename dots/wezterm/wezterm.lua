@@ -55,6 +55,11 @@ config.window_decorations          = 'RESIZE'
 config.max_fps    = 120
 config.prefer_egl = true
 
+-- graphics: image.nvim draws PNGs inside nvim via the kitty graphics
+-- protocol. WezTerm defaults this on already; set it explicitly so the
+-- intent survives config refactors.
+config.enable_kitty_graphics = true
+
 -- commands palette
 wezterm.on('augment-command-palette', function()
   return commands

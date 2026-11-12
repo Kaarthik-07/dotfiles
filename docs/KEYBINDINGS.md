@@ -93,13 +93,15 @@ These are your keyboard's multimedia keys, so they work globally.
 | `XF86MonBrightnessDown` | brightness −10% with OSD |
 
 ### Screenshots
-All three copy a PNG to the clipboard and show a notification.
+Every capture is written to `~/Pictures/Screenshots/ss_<timestamp>.png`
+(the directory is created on first use) and shows a notification.
 
 | Key | Action |
 |---|---|
-| `Print` | whole screen → clipboard |
-| `Shift+Print` | **drag-select an area** → clipboard |
-| `Ctrl+Print` | whole screen → saved to `~/Pictures/ss_<timestamp>.png` **and** clipboard |
+| `Print` | whole screen → file **and** clipboard |
+| `Shift+Print` | **drag-select an area** → file **and** clipboard |
+| `Ctrl+Print` | whole screen → file only (clipboard untouched) |
+| `Mod+Print` | **Flameshot** — select a region, then crop/annotate (arrows, boxes, text, blur) before saving to the same folder |
 
 ### Clipboard
 | Key | Action |

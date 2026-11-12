@@ -30,8 +30,9 @@ One page, everything you need daily. Full detail in
 **Volume / brightness** work on the multimedia keys. Auto-lock fires after
 **5 min idle**.
 
-**Screenshots:** `Print` full · `Shift+Print` area · `Ctrl+Print` save — all
-copy to clipboard.
+**Screenshots:** `Print` full · `Shift+Print` area · `Ctrl+Print` save-only ·
+`Mod+Print` Flameshot crop/annotate — every one lands in
+`~/Pictures/Screenshots`.
 
 > `Mod+l` locks the screen, so focus-right moved to `Mod+Right`.
 

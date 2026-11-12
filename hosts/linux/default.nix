@@ -13,7 +13,8 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_12; # LTS instead of latest
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ];
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -43,7 +44,13 @@
     enable = true;
     enable32Bit = true;
   };
-
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d"; # keep real rollback targets
+  };
+  nix.settings.auto-optimise-store = true;
+  boot.loader.grub.configurationLimit = 10;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
     modesetting.enable = true;
@@ -81,6 +88,7 @@
         picom
         xclip
         maim
+        flameshot
         brightnessctl
         dunst
         xautolock
@@ -128,6 +136,9 @@
     curl
     wget
     nixd
+    qbittorrent
+    lutris
+    wine
   ];
 
   system.stateVersion = "24.11";

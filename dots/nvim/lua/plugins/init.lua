@@ -129,4 +129,24 @@ return {
       link     = { enabled = true },
     },
   },
+
+  -- -----------------------------
+  -- Inline images (PNG/JPG/...) rendered in the buffer
+  -- Uses the kitty graphics protocol -- WezTerm implements it natively.
+  -- Needs ImageMagick on PATH (see modules/home/neovim.nix extraPackages).
+  -- Opening an image file directly (`:e foo.png`) renders it full-buffer;
+  -- inside markdown, ![](img.png) renders inline too.
+  -- -----------------------------
+  {
+    "3rd/image.nvim",
+    build = false, -- magick_cli processor: no luarocks/rock build needed
+    event = { "BufReadPre", "BufNewFile" },
+    opts = {
+      backend   = "kitty",
+      processor = "magick_cli",
+      integrations = {
+        markdown = { enabled = true },
+      },
+    },
+  },
 }

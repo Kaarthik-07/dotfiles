@@ -88,8 +88,8 @@ nix flake update
 | locale | `en_US.UTF-8`, all `LC_*` → `en_IN` | Indian English formatting |
 
 **System packages:** `git curl wget nixd`
-**i3 extraPackages:** `i3status i3lock dmenu feh picom xclip maim brightnessctl
-dunst xautolock libnotify`
+**i3 extraPackages:** `i3status i3lock dmenu feh picom xclip maim flameshot
+brightnessctl dunst xautolock libnotify`
 
 **User `mikey`:** shell `zsh`, groups `wheel networkmanager audio video bluetooth`.
 
@@ -178,7 +178,7 @@ entries, deduplicated, and **shared between concurrent shells**.
 
 ## 6. `modules/linux/i3.nix` — the biggest module
 
-Writes 3 config files and defines 4 helper shell scripts.
+Writes 3 config files and defines the helper shell scripts below.
 
 ### Helper scripts
 | Script | What it does |
@@ -186,9 +186,10 @@ Writes 3 config files and defines 4 helper shell scripts.
 | `vol-up` / `vol-down` | `pamixer ±5` then a dunst OSD showing the new level |
 | `vol-mute` | toggles mute, OSD shows "Muted" or the level |
 | `bri-up` / `bri-down` | `brightnessctl ±10%` then an OSD |
-| `ss-full` | `maim` → clipboard, OSD "Copied to clipboard" |
-| `ss-area` | 0.2s delay, then `maim -s` (area select) → clipboard |
-| `ss-save` | saves to `~/Pictures/ss_YYYYmmdd_HHMMSS.png` **and** clipboard |
+| `ss-full` | `maim` → `~/Pictures/Screenshots/ss_*.png` **and** clipboard |
+| `ss-area` | 0.2s delay, then `maim -s` (drag-select area) → same folder **and** clipboard |
+| `ss-save` | `maim` → same folder, clipboard left alone |
+| `ss-crop` | seeds `~/.config/flameshot/flameshot.ini` (`savePath` = the screenshots dir) on first run, then `flameshot gui` for post-capture crop/annotate |
 | `dmenu-run` | wraps `dmenu_run` with `XDG_DATA_DIRS`/`XDG_DATA_HOME` set and a Nerd Font, so app icons actually render |
 | `wallpaper` | picks the first existing wallpaper from `~/Pictures/wallpaper.png`, `~/Downloads/dino.jpg`, `~/Pictures/dino.jpg` |
 
@@ -437,6 +438,10 @@ Full keybinding tables: [`KEYBINDINGS.md`](./KEYBINDINGS.md).
   keys like `Ctrl+A`/`Ctrl+E` work in the terminal), fast key repeat
   (`KeyRepeat 2` / `InitialKeyRepeat 15`), forced Dark appearance
 - **Trackpad:** tap to click, three-finger drag
+- **Screenshots:** `screencapture.location` → `/Users/mikey/Pictures/Screenshots`
+  (same folder as the Linux box), `type = png`. Cmd+Shift+3/4/5 all honour it,
+  and 4/5 give you the built-in **drag-to-crop** UI. The directory is created by
+  `home.file."Pictures/Screenshots/.keep"` in `hosts/macbook/home.nix`.
 
 ### `aerospace.nix` — macOS tiling window manager
 Writes `~/.config/aerospace/aerospace.toml` with 8px gaps everywhere, `tiles`
@@ -449,7 +454,9 @@ There is a **service mode** bound to `alt+shift+;`:
 
 ### `macbook/default.nix`
 Homebrew with `onActivation.cleanup = "zap"` (removes unused formulae on
-`brew cleanup`), casks `aerospace` + `wezterm`.
+`brew cleanup`), casks `aerospace` + `wezterm`. Also sets
+`system.primaryUser = "mikey"` — nix-darwin applies `system.defaults` (and
+homebrew) to that user only and fails activation without it.
 
 ---
 

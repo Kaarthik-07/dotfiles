@@ -5,6 +5,11 @@
     defaultEditor = true;
     withRuby      = false;
     withPython3   = false;
+
+    # image.nvim shells out to ImageMagick (magick/convert/identify) to
+    # scale and crop before handing pixels to the terminal, so put it on
+    # neovim's PATH only -- no need for it system-wide.
+    extraPackages = [ pkgs.imagemagick ];
   };
 
   # NvChad config lives in dots/nvim — symlinked to ~/.config/nvim

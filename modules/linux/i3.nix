@@ -34,23 +34,52 @@ let
     notify-send -h string:synchronous:brightness -h int:value:"$BRI" " Brightness" "$BRI%"
   '';
 
+  # Every screenshot -- whatever key took it -- lands in this directory.
+  ss-dir = "$HOME/Pictures/Screenshots";
+
   ss-full = pkgs.writeShellScript "ss-full" ''
-    maim | xclip -selection clipboard -t image/png
-    notify-send " Screenshot" "Copied to clipboard"
-  '';
-
-  ss-area = pkgs.writeShellScript "ss-area" ''
-    sleep 0.2
-    maim -s | xclip -selection clipboard -t image/png
-    notify-send " Screenshot" "Area copied to clipboard"
-  '';
-
-  ss-save = pkgs.writeShellScript "ss-save" ''
-    mkdir -p "$HOME/Pictures"
-    F="$HOME/Pictures/ss_$(date +%Y%m%d_%H%M%S).png"
-    maim "$F"
+    D="${ss-dir}"
+    mkdir -p "$D"
+    F="$D/ss_$(date +%Y%m%d_%H%M%S).png"
+    maim "$F" || exit 1
     xclip -selection clipboard -t image/png < "$F"
     notify-send " Screenshot" "Saved & copied: $F"
+  '';
+
+  # Region capture: maim -s drags out a rectangle (a crop decided at capture
+  # time). Pressing Escape aborts with a non-zero exit and writes nothing.
+  ss-area = pkgs.writeShellScript "ss-area" ''
+    D="${ss-dir}"
+    mkdir -p "$D"
+    sleep 0.2
+    F="$D/ss_$(date +%Y%m%d_%H%M%S).png"
+    maim -s "$F" || exit 0
+    xclip -selection clipboard -t image/png < "$F"
+    notify-send " Screenshot" "Area saved & copied: $F"
+  '';
+
+  # Ctrl+Print = save to disk only, so it never clobbers what is currently
+  # on the clipboard.
+  ss-save = pkgs.writeShellScript "ss-save" ''
+    D="${ss-dir}"
+    mkdir -p "$D"
+    F="$D/ss_$(date +%Y%m%d_%H%M%S).png"
+    maim "$F" || exit 1
+    notify-send " Screenshot" "Saved: $F"
+  '';
+
+  # Flameshot: interactive crop/annotate after the shot (arrows, boxes, text,
+  # blur, and drag-to-crop), saved into the same directory. The config is
+  # seeded once at runtime because flameshot rewrites its own ini on exit and
+  # a home-manager symlink into the nix store would be read-only.
+  ss-crop = pkgs.writeShellScript "ss-crop" ''
+    D="${ss-dir}"
+    CFG="$HOME/.config/flameshot/flameshot.ini"
+    mkdir -p "$D" "$HOME/.config/flameshot"
+    if [ ! -f "$CFG" ]; then
+      printf '%s\n' '[General]' "savePath=$D" 'savePathFixed=true' > "$CFG"
+    fi
+    exec ${pkgs.flameshot}/bin/flameshot gui
   '';
 
   # dmenu_run needs to be told where the icon themes and fonts live, otherwise
@@ -283,10 +312,11 @@ in
         bindsym XF86MonBrightnessUp   exec --no-startup-id ${bri-up}
         bindsym XF86MonBrightnessDown exec --no-startup-id ${bri-down}
 
-        # screenshots
+        # screenshots -- all four save into ~/Pictures/Screenshots
         bindsym Print       exec --no-startup-id ${ss-full}
         bindsym Shift+Print exec --no-startup-id ${ss-area}
         bindsym ctrl+Print  exec --no-startup-id ${ss-save}
+        bindsym $mod+Print  exec --no-startup-id ${ss-crop}
 
         # clipboard history
         bindsym $mod+Shift+v exec --no-startup-id ${copyq-bin} toggle
